@@ -7,7 +7,16 @@ const seed = async () => {
     email: 'test@test.com',
     password: '12345678',
   });
-
+  const pack = await Item.create({
+    name: 'Sealline 115L Boundary Pro Pack',
+    weight: 1871.1,
+    length: 31.7,
+    width: 47,
+    height: 76.2,
+    image_url: 'https://dummyimage.com/400x400/999999/222222',
+    userId: user.id,
+    category: 'Pack',
+  });
   const item = await Item.create({
     name: 'Tent',
     weight: 1344.0,
@@ -16,6 +25,8 @@ const seed = async () => {
     height: 15.2,
     image_url: 'https://dummyimage.com/400x400/999999/222222',
     userId: user.id,
+    itemId: pack.id,
+    category: 'Shelter',
   });
   await Item.create({
     name: 'Tent Stakes',
@@ -25,8 +36,10 @@ const seed = async () => {
     height: 8,
     image_url: 'https://dummyimage.com/400x400/999999/222222',
     userId: user.id,
-    itemId: item.id,
+    itemId: pack.id,
+    category: 'Shelter',
   });
+
   const user2 = await User.create({
     email: 'test2@test.com',
     password: '12345678',
@@ -39,6 +52,7 @@ const seed = async () => {
     height: 15.2,
     image_url: 'https://dummyimage.com/400x400/999999/222222',
     userId: user2.id,
+    category: 'Shelter',
   });
   await Item.create({
     name: 'Tent Stakes',
@@ -49,6 +63,7 @@ const seed = async () => {
     image_url: 'https://dummyimage.com/400x400/999999/222222',
     userId: user.id,
     itemId: item2.id,
+    category: 'Shelter',
   });
 };
 

@@ -1,9 +1,12 @@
+const bcrypt = require('bcrypt');
+
 const usersRouter = require('express').Router();
 const {
   models: { User },
 } = require('../db');
 
 const requireToken = require('./utils/requireToken');
+const itemsRouter = require('./itemsRouter');
 
 // usersRouter.get('/', async (req, res) => {
 //   const users = await User.findAll();
@@ -21,5 +24,34 @@ usersRouter.get('/', requireToken, async (req, res) => {
     res.status(404).json({ errorMessage: req.errorMessage });
   }
 });
+
+usersRouter.delete('/', requireToken, async (req, res) => {
+  try {
+    if (req.errorMessage) throw new Error(req.errorMessage);
+    const { id } = req.user;
+    const user = await User.findByPk(id);
+    await user.destroy();
+    res.sendStatus(204);
+  } catch (ex) {
+    console.log('Error in GET /users/: ', ex.message);
+    res.status(404).json({ errorMessage: req.errorMessage });
+  }
+});
+
+usersRouter.put('/', requireToken, async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { email, password } = req.body;
+    const hashedPass = await bcrypt.hash(JSON.stringify(password), 12);
+    const user = await User.findByPk(id);
+    const updatedUser = await user.update({ email, password: hashedPass });
+    res.status(200).send(updatedUser);
+  } catch (ex) {
+    console.log(ex);
+    res.status(409).json({ errorMessage: ex.errors[0].message });
+  }
+});
+
+usersRouter.use('/items', requireToken, itemsRouter);
 
 module.exports = usersRouter;
