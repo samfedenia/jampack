@@ -15,6 +15,18 @@ const Item = db.define('item', {
       notEmpty: true,
     },
   },
+  category: {
+    type: DataTypes.ENUM([
+      'Pack',
+      'Clothing',
+      'Shelter',
+      'Food',
+      'Utility',
+      'Medical',
+      'Other',
+    ]),
+    allowNull: false,
+  },
   // weight default grams
   weight: {
     type: DataTypes.DECIMAL(10, 1),
