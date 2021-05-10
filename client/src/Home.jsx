@@ -17,11 +17,15 @@ function Home() {
       display: 'flex',
       justifyContent: 'center',
     },
+    text: {
+      marginTop: '3rem',
+      marginBottom: '1rem',
+    },
   };
   return (
     <Paper elevation={3} variant='outlined' style={style.root}>
-      <Typography>
-        <h2>Welcome to PackPlanner!</h2>
+      <Typography variant='h3' style={style.text}>
+        Welcome to PackPlanner!
       </Typography>
     </Paper>
   );

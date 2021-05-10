@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Typography, Button } from '@material-ui/core';
+import { loginUser } from '../store/actions/user/login';
+import { clearError } from '../store/actions/error/clearError';
 
 const style = {
   root: {
@@ -29,9 +32,24 @@ const style = {
     marginTop: '1rem',
     marginBottom: '1rem',
   },
+  errorText: {
+    color: 'red',
+  },
 };
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  const error = useSelector((state) => state.error);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (error !== '') {
+      setLoading(false);
+    }
+    // return function resetError() {
+    //   dispatch(clearError());
+    // };
+  }, [error]);
+
   const [data, setData] = useState({ email: '', password: '' });
 
   function onChange(ev) {
@@ -40,8 +58,10 @@ export default function LoginForm() {
 
   function onSubmit(ev) {
     ev.preventDefault();
-    console.log('email', data.email, 'password', data.password);
     setData({ ...data, email: '', password: '' });
+    dispatch(loginUser({ email: data.email, password: data.password }));
+    setLoading(true);
+    setTimeout(() => setLoading(false), 500);
   }
 
   return (
@@ -50,6 +70,12 @@ export default function LoginForm() {
         <div>
           <Typography variant='h4'>Sign In:</Typography>
         </div>
+        {error !== '' && (
+          <Typography variant='h6' style={style.errorText}>
+            {error}
+          </Typography>
+        )}
+        {loading && <Typography variant='h6'>Loading...</Typography>}
         <div>
           <TextField
             label='Email'
@@ -59,6 +85,7 @@ export default function LoginForm() {
             name='email'
             type='email'
             value={data.email}
+            required
           />
         </div>
         <div>
@@ -70,6 +97,7 @@ export default function LoginForm() {
             name='password'
             type='password'
             value={data.password}
+            required
           />
         </div>
         <div>
