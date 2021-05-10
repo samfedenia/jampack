@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Link, Typography } from '@material-ui/core';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+import { getUser } from './store/actions/user/getUser';
 
 const primary = lightGreen[200];
 const secondary = lightGreen[800];
@@ -36,6 +39,14 @@ const style = {
 };
 
 function Nav() {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!user.id) {
+      dispatch(getUser());
+    }
+  }, [user]);
+
   return (
     <Grid style={style.grid} container>
       <Typography variant='h5'>
@@ -46,34 +57,37 @@ function Nav() {
           </div>
         </Link>
       </Typography>
-
-      <Typography variant='h5'>
-        <Link
-          underline='none'
-          style={style.link}
-          // color={primary}
-          to='/login'
-          component={RouteLink}
-        >
-          <div style={style.div}>
-            <AccountCircleIcon style={style.icon} />
-            Login/Signup
-          </div>
-        </Link>
-      </Typography>
-      <Typography variant='h5'>
-        <Link
-          underline='none'
-          style={style.link}
-          component={RouteLink}
-          to='/logout'
-        >
-          <div style={style.div}>
-            <ExitToAppIcon style={style.icon} />
-            Logout
-          </div>
-        </Link>
-      </Typography>
+      {!user.id && (
+        <Typography variant='h5'>
+          <Link
+            underline='none'
+            style={style.link}
+            // color={primary}
+            to='/login'
+            component={RouteLink}
+          >
+            <div style={style.div}>
+              <AccountCircleIcon style={style.icon} />
+              Login/Signup
+            </div>
+          </Link>
+        </Typography>
+      )}
+      {user.id && (
+        <Typography variant='h5'>
+          <Link
+            underline='none'
+            style={style.link}
+            component={RouteLink}
+            to='/logout'
+          >
+            <div style={style.div}>
+              <ExitToAppIcon style={style.icon} />
+              Logout
+            </div>
+          </Link>
+        </Typography>
+      )}
     </Grid>
   );
 }

@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Nav from './Nav';
 import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
 import Logout from './Logout';
+import userReducer from './store/reducers/userReducer';
 
 function App() {
+  const user = useSelector((state) => state.user);
   return (
     <>
       <CssBaseline />
@@ -24,6 +27,11 @@ function App() {
           <Route path='/logout'>
             <Logout />
           </Route>
+          {user.id && (
+            <Route path='/account'>
+              <div>hello!</div>
+            </Route>
+          )}
           <Route path='/'>
             <Home />
           </Route>

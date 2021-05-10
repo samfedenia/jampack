@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Typography, Button } from '@material-ui/core';
 import { loginUser } from '../store/actions/user/login';
 import { clearError } from '../store/actions/error/clearError';
+import { useHistory } from 'react-router';
 
 const style = {
   root: {
@@ -38,6 +39,9 @@ const style = {
 };
 
 export default function LoginForm() {
+  let timeout;
+  const history = useHistory();
+  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const error = useSelector((state) => state.error);
   const dispatch = useDispatch();
@@ -45,10 +49,16 @@ export default function LoginForm() {
     if (error !== '') {
       setLoading(false);
     }
-    // return function resetError() {
-    //   dispatch(clearError());
-    // };
-  }, [error]);
+    try {
+      if (user.id) {
+        clearTimeout(timeout);
+        dispatch(clearError());
+        history.push('/account');
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }, [error, user]);
 
   const [data, setData] = useState({ email: '', password: '' });
 
@@ -56,17 +66,27 @@ export default function LoginForm() {
     setData({ ...data, [ev.target.name]: ev.target.value });
   }
 
+  try {
+    if (user.id) {
+      clearTimeout(timeout);
+      dispatch(clearError());
+      history.push('/account');
+    }
+  } catch (ex) {
+    console.log(ex);
+  }
+
   function onSubmit(ev) {
     ev.preventDefault();
     setData({ ...data, email: '', password: '' });
     dispatch(loginUser({ email: data.email, password: data.password }));
     setLoading(true);
-    setTimeout(() => setLoading(false), 500);
+    timeout = setTimeout(() => setLoading(false), 500);
   }
 
   return (
     <div style={style.root}>
-      <form onSubmit={onSubmit} autoComplete='off' style={style.form}>
+      <form onSubmit={onSubmit} autoComplete='on' style={style.form}>
         <div>
           <Typography variant='h4'>Sign In:</Typography>
         </div>
