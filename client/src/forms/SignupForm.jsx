@@ -4,6 +4,7 @@ import { TextField, Typography, Button } from '@material-ui/core';
 import TermsCheckbox from './TermsCheckbox';
 import { createUser } from '../store/actions/user/signup';
 import { clearError } from '../store/actions/error/clearError';
+import { useHistory } from 'react-router';
 
 const style = {
   root: {
@@ -39,16 +40,25 @@ const style = {
 };
 
 export default function SignupForm() {
+  let timeout;
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const error = useSelector((state) => state.error);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     if (error !== '') {
       setLoading(false);
     }
-    // return function resetError() {
-    //   dispatch(clearError());
-    // };
+    try {
+      if (user.id) {
+        clearTimeout(timeout);
+        dispatch(clearError());
+        history.push('/account');
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
   }, [error]);
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -60,18 +70,27 @@ export default function SignupForm() {
   function onChange(ev) {
     setData({ ...data, [ev.target.name]: ev.target.value });
   }
+  try {
+    if (user.id) {
+      clearTimeout(timeout);
+      dispatch(clearError());
+      history.push('/account');
+    }
+  } catch (ex) {
+    console.log(ex);
+  }
 
   async function onSubmit(ev) {
     ev.preventDefault();
     setData({ ...data, email: '', password: '' });
     dispatch(createUser({ email: data.email, password: data.password }));
     setLoading(true);
-    setTimeout(() => setLoading(false), 500);
+    timeout = setTimeout(() => setLoading(false), 500);
   }
 
   return (
     <div style={style.root}>
-      <form onSubmit={onSubmit} autoComplete='off' style={style.form}>
+      <form onSubmit={onSubmit} autoComplete='on' style={style.form}>
         <div>
           <Typography variant='h4'>Create an account:</Typography>
         </div>

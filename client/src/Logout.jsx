@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Paper, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from './store/actions/user/logout';
+import { useHistory } from 'react-router';
 
 const style = {
   div: {
@@ -25,8 +26,12 @@ const style = {
   },
 };
 function Logout() {
+  const history = useHistory();
   const dispatch = useDispatch();
-  useEffect(() => dispatch(logoutUser()));
+  useEffect(() => {
+    dispatch(logoutUser());
+    setTimeout(() => history.push('/'), 1000);
+  });
   return (
     <Paper elevation={3} variant='outlined' style={style.root}>
       <Typography variant='h3' style={style.text}>
