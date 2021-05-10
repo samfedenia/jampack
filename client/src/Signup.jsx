@@ -1,10 +1,19 @@
 import React from 'react';
+import { Paper } from '@material-ui/core';
+import SignupForm from './forms/SignupForm';
 
 function Signup() {
+  const style = {
+    root: {
+      height: '100vh',
+    },
+  };
   return (
-    <div>
-      <h2>Please sign up</h2>
-    </div>
+    <>
+      <Paper elevation={3} variant='outlined' style={style.root}>
+        <SignupForm />
+      </Paper>
+    </>
   );
 }
 

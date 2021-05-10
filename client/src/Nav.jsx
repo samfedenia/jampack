@@ -25,6 +25,13 @@ const style = {
     width: 60,
     height: 60,
     flexDirection: 'column',
+    color: secondary,
+  },
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 
@@ -32,20 +39,8 @@ function Nav() {
   return (
     <Grid style={style.grid} container>
       <Typography variant='h5'>
-        <Link
-          underline='none'
-          style={style.link}
-          color={primary}
-          to='/'
-          component={RouteLink}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+        <Link underline='none' style={style.link} to='/' component={RouteLink}>
+          <div style={style.div}>
             <HomeIcon style={style.icon} />
             Home
           </div>
@@ -56,28 +51,16 @@ function Nav() {
         <Link
           underline='none'
           style={style.link}
-          color={primary}
+          // color={primary}
           to='/login'
           component={RouteLink}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <div style={style.div}>
             <AccountCircleIcon style={style.icon} />
             Login/Signup
           </div>
         </Link>
       </Typography>
-      {/* <Typography variant='h5'>
-        <Link style={style.link} component={RouteLink} to='/signup'>
-          Signup
-        </Link>
-      </Typography> */}
       <Typography variant='h5'>
         <Link
           underline='none'
@@ -85,14 +68,7 @@ function Nav() {
           component={RouteLink}
           to='/logout'
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <div style={style.div}>
             <ExitToAppIcon style={style.icon} />
             Logout
           </div>
