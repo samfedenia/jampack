@@ -58,7 +58,7 @@ export default function LoginForm() {
     } catch (ex) {
       console.log(ex);
     }
-  }, [error, user]);
+  }, []);
 
   const [data, setData] = useState({ email: '', password: '' });
 
