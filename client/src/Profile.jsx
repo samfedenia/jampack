@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link as RouteLink } from 'react-router-dom';
 import { Paper, Typography, Button } from '@material-ui/core';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +8,7 @@ import { setItem } from './store/actions/items/setItem';
 import { deleteItem } from './store/actions/items/deleteItem';
 import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
+import AddToPackSelect from './forms/AddToPackSelect';
 
 const primary = lightGreen[100];
 const secondary = lightGreen[600];
@@ -140,9 +142,10 @@ function Profile() {
             <table style={style.table}>
               <thead style={style.tr}>
                 <tr>
+                  <th style={style.th}>Add To Pack</th>
                   <th style={style.th}>Name</th>
                   <th style={style.th}>Category</th>
-                  <th style={style.th}>Weight</th>
+                  <th style={style.th}>Weight [g]</th>
                   <th style={style.th}>Length [cm]</th>
                   <th style={style.th}>Width [cm]</th>
                   <th style={style.th}>Height [cm]</th>
@@ -152,7 +155,27 @@ function Profile() {
               <tbody>
                 {items.map((item, id) => (
                   <tr key={id} style={style.tr}>
-                    <td style={style.td}>{item.name}</td>
+                    <td style={style.td}>
+                      {item.category !== 'Pack' ? (
+                        <AddToPackSelect packs={packs} item={item} />
+                      ) : (
+                        <div> </div>
+                      )}
+                    </td>
+                    {item.category !== 'Pack' ? (
+                      <td style={style.td}>{item.name}</td>
+                    ) : (
+                      <td style={style.td}>
+                        <RouteLink
+                          to={{
+                            pathname: '/pack',
+                            hash: `#${item.id}`,
+                          }}
+                        >
+                          {item.name}
+                        </RouteLink>
+                      </td>
+                    )}
                     <td style={style.td}>{item.category}</td>
                     <td style={style.td}>{item.weight}</td>
                     <td style={style.td}>{item.length}</td>
@@ -179,18 +202,30 @@ function Profile() {
 
                       {item.category !== 'Pack' && (
                         <div>
-                          <Button
+                          {/* <Button
                             variant='contained'
                             color='secondary'
                             style={style.button}
+                            onClick={() => dispatch(addToPack(item, pack))}
                           >
                             Add to pack
-                          </Button>
-                          <select style={{ padding: '.5rem' }}>
+                          </Button> */}
+                          {/* <select style={{ padding: '.5rem' }}>
                             {packs.map((pack, id) => (
                               <option key={id}>{pack.name}</option>
                             ))}
-                          </select>
+                          </select> */}
+                          {/* <FormControl>
+                            <Select
+                              value={pack}
+                              onChange={onChange}
+                              name='pack'
+                              style={style.selectDiv}
+                            >
+                              <MenuItem key={id} value={pack}>{pack.name}</MenuItem>
+                              
+                            </Select>
+                          </FormControl> */}
                         </div>
                       )}
                     </td>
