@@ -12,8 +12,10 @@ const _createItem = (item) => ({
 // thunk
 const createItem = (item) => async (dispatch) => {
   try {
-    await axios.post(`/api/user/items/`, item, getToken());
-    dispatch(_createItem(item));
+    const newItem = (await axios.post(`/api/user/items/`, item, getToken()))
+      .data;
+
+    dispatch(_createItem(newItem));
   } catch (err) {
     console.log(err.message);
   }
