@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Typography, Button } from '@material-ui/core';
+import lightGreen from '@material-ui/core/colors/lightGreen';
 import TermsCheckbox from './TermsCheckbox';
 import { createUser } from '../store/actions/user/signup';
 import { clearError } from '../store/actions/error/clearError';
 import { useHistory } from 'react-router';
 
+const primary = lightGreen[200];
+const secondary = lightGreen[800];
 const style = {
   root: {
     display: 'flex',
@@ -23,7 +26,7 @@ const style = {
   button: {
     margin: '1rem',
     width: '10rem',
-    backgroundColor: 'green',
+    backgroundColor: secondary,
   },
   form: {
     display: 'flex',

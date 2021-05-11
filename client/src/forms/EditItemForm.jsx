@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Typography, Button } from '@material-ui/core';
 import lightGreen from '@material-ui/core/colors/lightGreen';
-import { loginUser } from '../store/actions/user/login';
+import TermsCheckbox from './TermsCheckbox';
+import { createUser } from '../store/actions/user/signup';
 import { clearError } from '../store/actions/error/clearError';
 import { useHistory } from 'react-router';
 
@@ -41,12 +42,12 @@ const style = {
   },
 };
 
-export default function LoginForm() {
+export default function EditItemForm() {
   let timeout;
   const history = useHistory();
-  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const error = useSelector((state) => state.error);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     if (error !== '') {
@@ -63,12 +64,15 @@ export default function LoginForm() {
     }
   }, []);
 
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [data, setData] = useState({ email: '', password: '' });
 
+  function toggleButton() {
+    setButtonDisabled(!buttonDisabled);
+  }
   function onChange(ev) {
     setData({ ...data, [ev.target.name]: ev.target.value });
   }
-
   try {
     if (user.id) {
       clearTimeout(timeout);
@@ -79,10 +83,10 @@ export default function LoginForm() {
     console.log(ex);
   }
 
-  function onSubmit(ev) {
+  async function onSubmit(ev) {
     ev.preventDefault();
     setData({ ...data, email: '', password: '' });
-    dispatch(loginUser({ email: data.email, password: data.password }));
+    dispatch(createUser({ email: data.email, password: data.password }));
     setLoading(true);
     timeout = setTimeout(() => setLoading(false), 500);
   }
@@ -91,7 +95,7 @@ export default function LoginForm() {
     <div style={style.root}>
       <form onSubmit={onSubmit} autoComplete='on' style={style.form}>
         <div>
-          <Typography variant='h4'>Sign In:</Typography>
+          <Typography variant='h4'>Edit Item:</Typography>
         </div>
         {error !== '' && (
           <Typography variant='h6' style={style.errorText}>
@@ -101,7 +105,7 @@ export default function LoginForm() {
         {loading && <Typography variant='h6'>Loading...</Typography>}
         <div>
           <TextField
-            label='Email'
+            label='Name'
             id='margin-none'
             style={style.textField}
             onChange={onChange}
@@ -113,7 +117,7 @@ export default function LoginForm() {
         </div>
         <div>
           <TextField
-            label='Password'
+            label='Category'
             id='margin-none'
             style={style.textField}
             onChange={onChange}
@@ -123,14 +127,18 @@ export default function LoginForm() {
             required
           />
         </div>
+        {/* <div>
+          <TermsCheckbox toggleButton={toggleButton} />
+        </div> */}
         <div>
           <Button
+            disabled={buttonDisabled}
             variant='contained'
             color='secondary'
             style={style.button}
             type='submit'
           >
-            Sign In
+            Sign up
           </Button>
         </div>
       </form>
