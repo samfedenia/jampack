@@ -59,7 +59,7 @@ export default function SignupForm() {
     } catch (ex) {
       console.log(ex);
     }
-  }, [error]);
+  }, []);
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [data, setData] = useState({ email: '', password: '' });

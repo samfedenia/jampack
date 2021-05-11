@@ -21,10 +21,6 @@ const getItems = () => async (dispatch) => {
     if (items.data.items) dispatch(_getItems(items.data.items));
   } catch (err) {
     console.log(err.message);
-    const errorMessage = err.message;
-    dispatch(setError(errorMessage));
-    clearToken();
-    dispatch(clearError());
   }
 };
 

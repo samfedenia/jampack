@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Paper, Typography, Button } from '@material-ui/core';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import { useSelector, useDispatch } from 'react-redux';
@@ -70,17 +70,17 @@ const style = {
   },
 };
 
-let count = 0;
 function Profile() {
+  const ref = useRef(0);
+  const user = useSelector((state) => state.user);
   const items = useSelector((state) => state.items);
   const packs = [...items].filter((item) => item.category === 'Pack');
   const dispatch = useDispatch();
+  console.log('ref counter: ', ref.current);
   useEffect(() => {
-    if (items.length === 0 || count < 1) {
-      dispatch(getItems());
-      count++;
-    }
-  }, [items]);
+    dispatch(getItems());
+  }, []);
+
   console.log(items);
 
   return (
@@ -92,9 +92,9 @@ function Profile() {
         <Button variant='contained' color='secondary' style={style.button}>
           Add item
         </Button>
-        <Typography variant='h8' style={style.text}>
+        <Typography variant='h6' style={style.text}>
           <table style={style.table}>
-            <tr style={style.tr}>
+            <thead style={style.tr}>
               <th style={style.th}>Name</th>
               <th style={style.th}>Category</th>
               <th style={style.th}>Weight</th>
@@ -102,49 +102,51 @@ function Profile() {
               <th style={style.th}>Width [cm]</th>
               <th style={style.th}>Height [cm]</th>
               <th style={style.th}>Actions</th>
-            </tr>
-            {items.map((item, id) => (
-              <tr key={id} style={style.tr}>
-                <td style={style.td}>{item.name}</td>
-                <td style={style.td}>{item.category}</td>
-                <td style={style.td}>{item.weight}</td>
-                <td style={style.td}>{item.length}</td>
-                <td style={style.td}>{item.width}</td>
-                <td style={style.td}>{item.height}</td>
-                <td style={style.td.actions}>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    style={style.button}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    style={style.button}
-                  >
-                    Edit
-                  </Button>
-                  {item.category !== 'Pack' && (
-                    <div>
-                      <Button
-                        variant='contained'
-                        color='secondary'
-                        style={style.button}
-                      >
-                        Add to pack
-                      </Button>
-                      <select style={{ padding: '.5rem' }}>
-                        {packs.map((pack, id) => (
-                          <option key={id}>{pack.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
+            </thead>
+            <tbody>
+              {items.map((item, id) => (
+                <tr key={id} style={style.tr}>
+                  <td style={style.td}>{item.name}</td>
+                  <td style={style.td}>{item.category}</td>
+                  <td style={style.td}>{item.weight}</td>
+                  <td style={style.td}>{item.length}</td>
+                  <td style={style.td}>{item.width}</td>
+                  <td style={style.td}>{item.height}</td>
+                  <td style={style.td.actions}>
+                    <Button
+                      variant='contained'
+                      color='secondary'
+                      style={style.button}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='secondary'
+                      style={style.button}
+                    >
+                      Edit
+                    </Button>
+                    {item.category !== 'Pack' && (
+                      <div>
+                        <Button
+                          variant='contained'
+                          color='secondary'
+                          style={style.button}
+                        >
+                          Add to pack
+                        </Button>
+                        <select style={{ padding: '.5rem' }}>
+                          {packs.map((pack, id) => (
+                            <option key={id}>{pack.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </Typography>
       </div>
