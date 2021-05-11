@@ -8,6 +8,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Logout from './Logout';
 import Profile from './Profile';
+import Pack from './Pack';
 function App() {
   const user = useSelector((state) => state.user);
   return (
@@ -27,9 +28,14 @@ function App() {
             <Logout />
           </Route>
           {user.id && (
-            <Route path='/account'>
-              <Profile />
-            </Route>
+            <>
+              <Route path='/account'>
+                <Profile />
+              </Route>
+              <Route path='/pack'>
+                <Pack />
+              </Route>
+            </>
           )}
           <Route path='/'>
             <Home />
