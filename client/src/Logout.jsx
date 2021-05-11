@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Paper, Typography } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from './store/actions/user/logout';
 import { useHistory } from 'react-router';
 
@@ -27,9 +27,12 @@ const style = {
 };
 function Logout() {
   const history = useHistory();
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(logoutUser());
+    if (user.id) {
+      dispatch(logoutUser());
+    }
     setTimeout(() => history.push('/'), 1000);
   });
   return (
