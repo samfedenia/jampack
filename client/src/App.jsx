@@ -7,8 +7,7 @@ import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
 import Logout from './Logout';
-import userReducer from './store/reducers/userReducer';
-
+import Profile from './Profile';
 function App() {
   const user = useSelector((state) => state.user);
   return (
@@ -29,7 +28,7 @@ function App() {
           </Route>
           {user.id && (
             <Route path='/account'>
-              <div>hello!</div>
+              <Profile />
             </Route>
           )}
           <Route path='/'>

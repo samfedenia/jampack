@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const usersRouter = require('express').Router();
+const userRouter = require('express').Router();
 const {
   models: { User },
 } = require('../db');
@@ -13,7 +13,7 @@ const itemsRouter = require('./itemsRouter');
 //   res.status(200).send(users);
 // });
 
-usersRouter.get('/', requireToken, async (req, res) => {
+userRouter.get('/', requireToken, async (req, res) => {
   try {
     if (req.errorMessage) throw new Error(req.errorMessage);
     const { id } = req.user;
@@ -25,7 +25,7 @@ usersRouter.get('/', requireToken, async (req, res) => {
   }
 });
 
-usersRouter.delete('/', requireToken, async (req, res) => {
+userRouter.delete('/', requireToken, async (req, res) => {
   try {
     if (req.errorMessage) throw new Error(req.errorMessage);
     const { id } = req.user;
@@ -38,7 +38,7 @@ usersRouter.delete('/', requireToken, async (req, res) => {
   }
 });
 
-usersRouter.put('/', requireToken, async (req, res) => {
+userRouter.put('/', requireToken, async (req, res) => {
   try {
     const { id } = req.user;
     const { email, password } = req.body;
@@ -52,6 +52,6 @@ usersRouter.put('/', requireToken, async (req, res) => {
   }
 });
 
-usersRouter.use('/items', requireToken, itemsRouter);
+userRouter.use('/items', requireToken, itemsRouter);
 
-module.exports = usersRouter;
+module.exports = userRouter;
