@@ -38,7 +38,7 @@ itemsRouter.post('/', requireToken, async (req, res) => {
       image_url,
       itemId,
     } = req.body;
-    const item = Item.create({
+    const item = await Item.create({
       name,
       category,
       weight,
