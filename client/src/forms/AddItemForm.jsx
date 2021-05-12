@@ -98,7 +98,7 @@ export default function AddItemForm() {
       })
     );
     setLoading(true);
-    timeout = setTimeout(() => setLoading(false), 500);
+    setTimeout(() => setLoading(false), 500);
   }
 
   return (

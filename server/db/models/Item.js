@@ -102,4 +102,10 @@ const Item = db.define('item', {
   },
 });
 
+Item.addHook('beforeCreate', (item) => {
+  if (item.image_url === '') {
+    item.image_url = 'https://dummyimage.com/400x400/999999/222222';
+  }
+});
+
 module.exports = Item;

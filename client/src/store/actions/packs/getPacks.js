@@ -1,27 +1,22 @@
-// import axios from 'axios';
-// import getToken from '../../utils/getToken';
-// import clearToken from '../../utils/clearToken';
-// import { setError } from '../error/setError';
-// import { clearError } from '../error/clearError';
+import axios from 'axios';
+import getToken from '../../utils/getToken';
 
-// // action type
-// const GET_PACK = 'GET_PACK';
-// // action creator
-// const _getPack = (pack) => ({
-//   type: GET_PACK,
-//   pack,
-// });
+// action type
+const GET_PACKS = 'GET_PACKS';
+// action creator
+const _getPacks = (packs) => ({
+  type: GET_PACKS,
+  packs,
+});
 
-// // thunk
-// const getPack = (pack) => async (dispatch) => {
-//   try {
-//     dispatch(clearError());
-//     const pack = await axios.get(`/api/user/items/packs/${pack.id}`, getToken());
-//     console.log(packs.data);
-//     if (packs.data.items) dispatch(_getPacks(packs.data.items));
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// };
+// thunk
+const getPacks = () => async (dispatch) => {
+  try {
+    const packs = (await axios.get('/api/user/items/packs', getToken())).data;
+    dispatch(_getPacks(packs));
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
-// export { getPacks, GET_PACKS };
+export { getPacks, GET_PACKS };
