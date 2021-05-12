@@ -5,7 +5,11 @@ import { CREATE_ITEM } from '../actions/items/createItem';
 
 const itemsReducer = (state = [], action) => {
   if (action.type === GET_ITEMS) {
-    return [...state, ...action.items];
+    let newItems = [];
+    for (let item of action.items) {
+      if (!state.some((obj) => obj.id === item.id)) newItems.push(item);
+    }
+    return [...state, ...newItems];
   }
   if (action.type === DELETE_ITEM) {
     return [...state.filter((item) => item.id !== action.item.id)];
