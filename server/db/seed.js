@@ -5,7 +5,7 @@ const {
 const seed = async () => {
   const user = await User.create({
     email: 'test@test.com',
-    password: '12345678',
+    password: '1',
   });
   const pack = await Item.create({
     name: 'Sealline 115L Boundary Pro Pack',
