@@ -39,6 +39,17 @@ const seed = async () => {
     itemId: pack.id,
     category: 'Shelter',
   });
+  await Item.create({
+    name: 'Sleeping Bag',
+    weight: 1400,
+    length: 36,
+    width: 25,
+    height: 25,
+    image_url: 'https://dummyimage.com/400x400/999999/222222',
+    userId: user.id,
+    itemId: pack.id,
+    category: 'Shelter',
+  });
 
   const user2 = await User.create({
     email: 'test2@test.com',
@@ -61,7 +72,7 @@ const seed = async () => {
     width: 8,
     height: 8,
     image_url: 'https://dummyimage.com/400x400/999999/222222',
-    userId: user.id,
+    userId: user2.id,
     itemId: item2.id,
     category: 'Shelter',
   });

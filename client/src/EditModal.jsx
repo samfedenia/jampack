@@ -4,8 +4,8 @@ import lightGreen from '@material-ui/core/colors/lightGreen';
 import EditItemForm from './forms/EditItemForm';
 
 const EditModal = ({ handleClose, show, children }) => {
-  const primary = lightGreen[200];
-  const secondary = lightGreen[800];
+  const primary = lightGreen[100];
+  const secondary = lightGreen[600];
   const styles = {
     root: {
       height: 'auto',

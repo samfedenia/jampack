@@ -1,4 +1,5 @@
 import React from 'react';
+
 // Find the latest version by visiting https://cdn.skypack.dev/three.
 import * as THREE from 'three';
 import oc from 'three-orbit-controls';
@@ -8,67 +9,31 @@ const OrbitControls = oc(THREE);
 class PackModel extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    const existingCanvas = document.querySelector('canvas');
-    if (existingCanvas) existingCanvas.remove();
+    this.state = {
+      renderer: new THREE.WebGLRenderer({
+        alpha: false,
+        antialias: true,
+      }),
+    };
   }
 
   componentWillUnmount() {
     const existingCanvas = document.querySelector('canvas');
-    if (existingCanvas) existingCanvas.remove();
+    if (existingCanvas) {
+      this.state.renderer.clear();
+      existingCanvas.remove();
+    }
   }
 
   render() {
+    const renderer = this.state.renderer;
     const packDims = this.props.packDims;
     let items = this.props.packItems;
-    items = items.map((item) => [
-      [item.width, item.height, item.length],
-      [0, 0, 0],
-    ]);
+    console.log(packDims);
+    console.log(items);
+
     const scale = Math.max(...packDims);
-    const normalPackDims = packDims.map((dim) => dim / scale);
 
-    // const fitCameraToObject = function (camera, object, offset, controls) {
-    //   offset = offset || 1.25;
-
-    //   const boundingBox = new THREE.Box3();
-
-    //   // get bounding box of object - this will be used to setup controls and camera
-    //   boundingBox.setFromObject(object);
-
-    //   const center = boundingBox.getCenter();
-
-    //   const size = boundingBox.getSize();
-
-    //   // get the max side of the bounding box (fits to width OR height as needed )
-    //   const maxDim = Math.max(size.x, size.y, size.z);
-    //   const fov = camera.fov * (Math.PI / 180);
-    //   let cameraZ = Math.abs((maxDim / 4) * Math.tan(fov * 2));
-
-    //   cameraZ *= offset; // zoom out a little so that objects don't fill the screen
-
-    //   camera.position.z = cameraZ;
-
-    //   const minZ = boundingBox.min.z;
-    //   const cameraToFarEdge = minZ < 0 ? -minZ + cameraZ : cameraZ - minZ;
-
-    //   camera.far = cameraToFarEdge * 3;
-    //   camera.updateProjectionMatrix();
-
-    //   if (controls) {
-    //     // set camera to rotate around center of loaded object
-    //     controls.target = center;
-
-    //     // prevent camera from zooming out far enough to create far plane cutoff
-    //     controls.maxDistance = cameraToFarEdge * 2;
-
-    //     controls.saveState();
-    //   } else {
-    //     camera.lookAt(center);
-    //   }
-    // };
     function threeItUp(
       divSelector,
       packDims,
@@ -84,10 +49,10 @@ class PackModel extends React.Component {
         1000
       );
 
-      const renderer = new THREE.WebGLRenderer({
-        alpha: false,
-        antialias: true,
-      });
+      //   const renderer = new THREE.WebGLRenderer({
+      //     alpha: false,
+      //     antialias: true,
+      //   });
 
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
@@ -117,6 +82,9 @@ class PackModel extends React.Component {
         pack.position.z = z;
 
         const edges = new THREE.EdgesHelper(pack, 'black');
+        edges.position.x = x;
+        edges.position.y = y;
+        edges.position.z = z;
         edges.material.linewidth = 2;
         return [pack, edges];
       }
@@ -140,7 +108,11 @@ class PackModel extends React.Component {
       normalizedPackDims.push(packDims[0] / normalizationFactor);
       normalizedPackDims.push(packDims[1] / normalizationFactor);
       normalizedPackDims.push(packDims[2] / normalizationFactor);
-      const [pack, edges] = createPack(normalizedPackDims, [0, 0, 0]);
+      const [pack, edges] = createPack(normalizedPackDims, [
+        normalizedPackDims[0] / 2,
+        normalizedPackDims[1] / 2,
+        normalizedPackDims[2] / 2,
+      ]);
 
       scene.add(pack);
       scene.add(edges);
@@ -158,10 +130,9 @@ class PackModel extends React.Component {
         scene.add(_item);
       }
 
-      camera.position.set(0, 0, scale * 2.5);
+      camera.position.set(packDims[0] * 3, packDims[1] * 3, packDims[2] * 3);
 
       controls.update();
-      //   fitCameraToObject(camera, pack, 1, controls);
 
       const animate = () => {
         requestAnimationFrame(animate);

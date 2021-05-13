@@ -6,8 +6,8 @@ import { loginUser } from '../store/actions/user/login';
 import { clearError } from '../store/actions/error/clearError';
 import { useHistory } from 'react-router';
 
-const primary = lightGreen[200];
-const secondary = lightGreen[800];
+const primary = lightGreen[100];
+const secondary = lightGreen[600];
 const style = {
   root: {
     display: 'flex',
@@ -102,7 +102,6 @@ export default function LoginForm() {
         <div>
           <TextField
             label='Email'
-            id='margin-none'
             style={style.textField}
             onChange={onChange}
             name='email'
@@ -114,7 +113,6 @@ export default function LoginForm() {
         <div>
           <TextField
             label='Password'
-            id='margin-none'
             style={style.textField}
             onChange={onChange}
             name='password'

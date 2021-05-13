@@ -9,8 +9,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { getUser } from './store/actions/user/getUser';
 
-const primary = lightGreen[200];
-const secondary = lightGreen[800];
+const primary = lightGreen[100];
+const secondary = lightGreen[600];
 const style = {
   grid: {
     backgroundColor: primary,
