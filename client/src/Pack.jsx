@@ -93,6 +93,7 @@ class Pack extends React.Component {
     let notInPack = null;
     let sortedPackSubitems = [];
     let sortedNotinPack = [];
+    let sortedPrePackItems = [];
     if (this.props.packs.length > 0) {
       pack = this.props.packs.filter(
         (pack) => pack.id === window.location.hash.slice(1)
@@ -100,8 +101,13 @@ class Pack extends React.Component {
       packDims = [pack.width, pack.height, pack.depth];
       let bin = new Bin('pack', pack.width, pack.height, pack.depth, Infinity);
       const itemArr = [];
+      sortedPrePackItems = pack.SubItem.sort(function (a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
 
-      for (let i = 0; i < pack.SubItem.length; i++) {
+      for (let i = 0; i < sortedPrePackItems.length; i++) {
         let currentItem = pack.SubItem[i];
         itemArr.push(
           new Item(
@@ -201,6 +207,12 @@ class Pack extends React.Component {
           sortedNotinPack.push(item);
         }
       }
+      sortedPackSubitems.sort(function (a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
+
       sortedPackSubitems = [...sortedPackSubitems, ...sortedNotinPack];
 
       const totalItemsWeight = pack.SubItem.reduce((acc, cur) => {
@@ -299,13 +311,13 @@ class Pack extends React.Component {
               >
                 <div style={{ fontWeight: 'bold' }}>{pack.name}</div>
                 <div style={{ fontSize: 'smaller' }}>{`Loaded pack weight: ${
-                  totalWeight / 1000
+                  Math.round((10 * totalWeight) / 1000) / 10
                 } [kg]`}</div>
-                <div style={{ fontSize: 'smaller' }}>{`Pack weight: ${
-                  pack.weight / 1000
+                <div style={{ fontSize: 'smaller' }}>{`Unloaded Pack weight: ${
+                  Math.round((10 * pack.weight) / 1000) / 10
                 } [kg]`}</div>
                 <div style={{ fontSize: 'smaller' }}>{`% due to pack weight: ${
-                  Math.round(100 * (pack.weight / totalWeight) * 100) / 100
+                  Math.round(10 * (pack.weight / totalWeight) * 100) / 10
                 } [%]`}</div>
                 <img
                   style={{ height: '100px', width: '100px' }}
