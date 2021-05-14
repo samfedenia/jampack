@@ -28,6 +28,7 @@ class PackModel extends React.Component {
   render() {
     const renderer = this.state.renderer;
     const packDims = this.props.packDims;
+    const colors = this.props.colors;
     let items = this.props.packItems;
 
     const scale = Math.max(...packDims);
@@ -36,7 +37,8 @@ class PackModel extends React.Component {
       divSelector,
       packDims,
       itemArr,
-      normalizationFactor = 1
+      normalizationFactor = 1,
+      colors
     ) {
       const scene = new THREE.Scene();
       scene.background = new THREE.Color(0xffffff);
@@ -56,14 +58,14 @@ class PackModel extends React.Component {
       renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
       document.querySelector(divSelector).appendChild(renderer.domElement);
       const controls = new OrbitControls(camera, renderer.domElement);
-      const colorArray = (len) => {
-        let arr = [];
-        for (let i = 0; i < len; i++) {
-          arr.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-        }
-        return arr;
-      };
-      const colors = colorArray(20);
+      // const colorArray = (len) => {
+      //   let arr = [];
+      //   for (let i = 0; i < len; i++) {
+      //     arr.push('#' + Math.floor(Math.random() * 16777215).toString(16));
+      //   }
+      //   return arr;
+      // };
+      // const colors = colorArray(20);
 
       function createPack(dims, position, color = '#836953') {
         const [len, width, height] = dims;
@@ -87,12 +89,13 @@ class PackModel extends React.Component {
         return [pack, edges];
       }
 
-      function createItem(dims, position, colors) {
+      function createItem(dims, position, color) {
         const [len, width, height] = dims;
         const [x, y, z] = position;
         const geometry = new THREE.BoxGeometry(len, width, height);
         const material = new THREE.MeshBasicMaterial({
-          color: colors[Math.floor(Math.random() * colors.length)],
+          // color: colors[Math.floor(Math.random() * colors.length)],
+          color,
         });
 
         const box = new THREE.Mesh(geometry, material);
@@ -114,7 +117,7 @@ class PackModel extends React.Component {
 
       scene.add(pack);
       scene.add(edges);
-
+      let idx = 0;
       for (let item of itemArr) {
         let normalizedItemDims = [];
         normalizedItemDims.push(item[0][0] / normalizationFactor);
@@ -124,7 +127,12 @@ class PackModel extends React.Component {
         normalizedItemPos.push(item[1][0] / normalizationFactor);
         normalizedItemPos.push(item[1][1] / normalizationFactor);
         normalizedItemPos.push(item[1][2] / normalizationFactor);
-        let _item = createItem(normalizedItemDims, normalizedItemPos, colors);
+        let _item = createItem(
+          normalizedItemDims,
+          normalizedItemPos,
+          colors[idx]
+        );
+        idx++;
         scene.add(_item);
       }
 
@@ -143,7 +151,7 @@ class PackModel extends React.Component {
       animate();
     }
 
-    threeItUp('body', packDims, items, 0.7);
+    threeItUp('body', packDims, items, 0.7, colors);
     return null;
   }
 }
