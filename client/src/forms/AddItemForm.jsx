@@ -22,14 +22,14 @@ const style = {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '1rem',
-    marginBottom: '1rem',
+    marginBottom: '0',
   },
   textField: {
     width: '50ch',
     margin: '8px',
   },
   button: {
-    margin: '1rem',
+    marginTop: '2rem',
     width: '10rem',
     backgroundColor: secondary,
   },
@@ -40,7 +40,7 @@ const style = {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '1rem',
-    marginBottom: '1rem',
+    marginBottom: '2rem',
   },
   errorText: {
     color: 'red',
