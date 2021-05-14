@@ -10,7 +10,7 @@ const seed = async () => {
   const pack = await Item.create({
     name: 'Sealline 115L Boundary Pro Pack',
     weight: 1871.1,
-    length: 31.7,
+    depth: 31.7,
     width: 47,
     height: 76.2,
     image_url:
@@ -21,7 +21,7 @@ const seed = async () => {
   const item = await Item.create({
     name: 'Tent',
     weight: 1344.0,
-    length: 40.6,
+    depth: 40.6,
     width: 15.2,
     height: 15.2,
     image_url:
@@ -33,7 +33,7 @@ const seed = async () => {
   await Item.create({
     name: 'Tent Stakes',
     weight: 150,
-    length: 16,
+    depth: 16,
     width: 8,
     height: 8,
     image_url:
@@ -45,7 +45,7 @@ const seed = async () => {
   await Item.create({
     name: 'Sleeping Bag',
     weight: 1400,
-    length: 36,
+    depth: 36,
     width: 25,
     height: 25,
     image_url:
@@ -62,8 +62,8 @@ const seed = async () => {
   const item2 = await Item.create({
     name: 'Tent',
     weight: 1344.0,
-    length: 40.6,
-    width: 15.2,
+    width: 40.6,
+    depth: 15.2,
     height: 15.2,
     image_url: 'https://dummyimage.com/400x400/999999/222222',
     userId: user2.id,
@@ -72,7 +72,7 @@ const seed = async () => {
   await Item.create({
     name: 'Tent Stakes',
     weight: 150,
-    length: 16,
+    depth: 16,
     width: 8,
     height: 8,
     image_url: 'https://dummyimage.com/400x400/999999/222222',

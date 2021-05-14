@@ -45,23 +45,6 @@ const Item = db.define('item', {
     },
   },
   // default cm
-  length: {
-    type: DataTypes.DECIMAL(10, 1),
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
-  },
-  length_in: {
-    type: DataTypes.VIRTUAL,
-    get() {
-      return `${Math.round((this.length * 10) / 2.54) / 10}`;
-    },
-    set() {
-      return 'do not set this field directly - set length instead';
-    },
-  },
-  // default cm
   width: {
     type: DataTypes.DECIMAL(10, 1),
     allowNull: false,
@@ -72,10 +55,10 @@ const Item = db.define('item', {
   width_in: {
     type: DataTypes.VIRTUAL,
     get() {
-      return `${Math.round((this.width * 10) / 2.54) / 10}`;
+      return `${Math.round((this.length * 10) / 2.54) / 10}`;
     },
     set() {
-      return 'do not set this field directly - set width instead';
+      return 'do not set this field directly - set length instead';
     },
   },
   // default cm
@@ -87,6 +70,23 @@ const Item = db.define('item', {
     },
   },
   height_in: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      return `${Math.round((this.width * 10) / 2.54) / 10}`;
+    },
+    set() {
+      return 'do not set this field directly - set width instead';
+    },
+  },
+  // default cm
+  depth: {
+    type: DataTypes.DECIMAL(10, 1),
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  depth_in: {
     type: DataTypes.VIRTUAL,
     get() {
       return `${Math.round((this.height * 10) / 2.54) / 10}`;

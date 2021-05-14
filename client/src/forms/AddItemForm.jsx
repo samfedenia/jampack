@@ -60,7 +60,7 @@ export default function AddItemForm() {
   const [data, setData] = useState({
     name: '',
     category: '',
-    length: '',
+    depth: '',
     weight: '',
     width: '',
     height: '',
@@ -78,7 +78,7 @@ export default function AddItemForm() {
       ...data,
       name: '',
       category: '',
-      length: '',
+      depth: '',
       weight: '',
       width: '',
       height: '',
@@ -90,7 +90,7 @@ export default function AddItemForm() {
         name: data.name,
         category: data.category,
         weight: data.weight,
-        length: data.length,
+        depth: data.depth,
         width: data.width,
         height: data.height,
         userId: user.id,
@@ -156,12 +156,12 @@ export default function AddItemForm() {
         </div>
         <div>
           <TextField
-            label='Length [cm]'
+            label='Depth [cm]'
             style={style.textField}
             onChange={onChange}
-            name='length'
+            name='depth'
             type='text'
-            value={data.length}
+            value={data.depth}
             required
           />
         </div>

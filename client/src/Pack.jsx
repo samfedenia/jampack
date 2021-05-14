@@ -81,9 +81,10 @@ class Pack extends React.Component {
       pack = this.props.packs.filter(
         (pack) => pack.id === window.location.hash.slice(1)
       )[0];
-      packDims = [pack.width, pack.height, pack.length];
-      let bin = new Bin('pack', pack.width, pack.height, pack.length, Infinity);
+      packDims = [pack.width, pack.height, pack.depth];
+      let bin = new Bin('pack', pack.width, pack.height, pack.depth, Infinity);
       const itemArr = [];
+      console.log(pack.SubItem);
       for (let i = 0; i < pack.SubItem.length; i++) {
         let currentItem = pack.SubItem[i];
         itemArr.push(
@@ -91,7 +92,7 @@ class Pack extends React.Component {
             currentItem.name,
             currentItem.width,
             currentItem.height,
-            currentItem.length,
+            currentItem.depth,
             currentItem.weight
           )
         );
@@ -107,35 +108,69 @@ class Pack extends React.Component {
       itemsToPack = [];
       for (let i = 0; i < bin.items.length; i++) {
         let currentItem = bin.items[i];
-
-        let currentItemPosition = [
-          Math.round(
-            (100 *
-              (currentItem.position[0] / factor +
-                currentItem.depth / (2 * factor))) /
-              100
-          ),
-          Math.round(
-            (100 *
-              (currentItem.position[1] / factor +
-                currentItem.width / (2 * factor))) /
-              100
-          ),
-          Math.round(
-            (100 *
-              (currentItem.position[2] / factor +
-                currentItem.height / (2 * factor))) /
-              100
-          ),
+        let currentItemPosition = [];
+        switch (currentItem.rotationType) {
+          case 1: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.height,
+              currentItem.width,
+              currentItem.depth,
+            ];
+            break;
+          }
+          case 2: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.height,
+              currentItem.depth,
+              currentItem.width,
+            ];
+            break;
+          }
+          case 3: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.depth,
+              currentItem.height,
+              currentItem.width,
+            ];
+            break;
+          }
+          case 4: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.depth,
+              currentItem.width,
+              currentItem.height,
+            ];
+            break;
+          }
+          case 5: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.width,
+              currentItem.depth,
+              currentItem.height,
+            ];
+            break;
+          }
+          default: {
+            [currentItem.width, currentItem.height, currentItem.depth] = [
+              currentItem.width,
+              currentItem.height,
+              currentItem.depth,
+            ];
+          }
+        }
+        currentItemPosition = [
+          currentItem.position[0] / factor + currentItem.width / (2 * factor),
+          currentItem.position[1] / factor + currentItem.height / (2 * factor),
+          currentItem.position[2] / factor + currentItem.depth / (2 * factor),
         ];
-        console.log(itemsToPack);
-        console.log(bin.items);
+        console.log('currentItempos2', currentItem.position[2]);
+        console.log('currentItem height', currentItem.height / factor);
 
         itemsToPack.push([
           [
-            currentItem.depth / factor,
             currentItem.width / factor,
             currentItem.height / factor,
+            currentItem.depth / factor,
           ],
           currentItemPosition,
         ]);

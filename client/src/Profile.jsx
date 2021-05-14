@@ -148,7 +148,7 @@ function Profile() {
                     <th style={style.th}>Name</th>
                     <th style={style.th}>Category</th>
                     <th style={style.th}>Weight [g]</th>
-                    <th style={style.th}>Length [cm]</th>
+                    <th style={style.th}>Depth [cm]</th>
                     <th style={style.th}>Width [cm]</th>
                     <th style={style.th}>Height [cm]</th>
                     <th style={style.th}>Actions</th>
@@ -186,7 +186,7 @@ function Profile() {
                       )}
                       <td style={style.td}>{item.category}</td>
                       <td style={style.td}>{item.weight}</td>
-                      <td style={style.td}>{item.length}</td>
+                      <td style={style.td}>{item.depth}</td>
                       <td style={style.td}>{item.width}</td>
                       <td style={style.td}>{item.height}</td>
                       <td style={style.td.actions}>
