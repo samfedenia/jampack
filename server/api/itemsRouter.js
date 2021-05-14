@@ -28,13 +28,13 @@ itemsRouter.post('/', requireToken, async (req, res) => {
   try {
     if (req.errorMessage) throw new Error(req.errorMessage);
     const { id } = req.user;
-    const { name, category, weight, length, width, height, image_url, itemId } =
+    const { name, category, weight, depth, width, height, image_url, itemId } =
       req.body;
     const item = await Item.create({
       name,
       category,
       weight,
-      length,
+      depth,
       width,
       height,
       image_url,
@@ -87,7 +87,7 @@ itemsRouter.put('/:itemId', requireToken, async (req, res) => {
     if (req.errorMessage) throw new Error(req.errorMessage);
     const { id } = req.user;
     const { itemId } = req.params;
-    const { name, category, weight, length, width, height, image_url } =
+    const { name, category, weight, depth, width, height, image_url } =
       req.body;
     const parentItemId = req.body.itemId;
     const item = await Item.findByPk(itemId);
@@ -95,7 +95,7 @@ itemsRouter.put('/:itemId', requireToken, async (req, res) => {
       name,
       category,
       weight,
-      length,
+      depth,
       width,
       height,
       image_url,

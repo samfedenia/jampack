@@ -29,8 +29,6 @@ class PackModel extends React.Component {
     const renderer = this.state.renderer;
     const packDims = this.props.packDims;
     let items = this.props.packItems;
-    console.log(packDims);
-    console.log(items);
 
     const scale = Math.max(...packDims);
 
