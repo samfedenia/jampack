@@ -36,8 +36,8 @@ const AddModal = ({ handleClose, show, children }) => {
     modalMain: {
       position: 'fixed',
       background: 'white',
-      width: '50%',
-      height: '75%',
+      width: '40%',
+      height: '70%',
       top: '50%',
       left: '50%',
       transform: 'translate(-50%,-50%)',
@@ -45,7 +45,7 @@ const AddModal = ({ handleClose, show, children }) => {
       borderRadius: '1rem',
     },
     button: {
-      marginTop: '0',
+      marginTop: '1rem',
       width: '10rem',
       backgroundColor: secondary,
     },
@@ -63,7 +63,6 @@ const AddModal = ({ handleClose, show, children }) => {
         <section style={styles.modalMain}>
           {children}
           <div style={styles.div}>
-            <AddItemForm />
             <Button
               variant='contained'
               color='secondary'
@@ -72,6 +71,7 @@ const AddModal = ({ handleClose, show, children }) => {
             >
               Close
             </Button>
+            <AddItemForm />
           </div>
         </section>
       </Paper>

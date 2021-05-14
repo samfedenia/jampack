@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import { connect } from 'react-redux';
 import { getPacks } from './store/actions/packs/getPacks';
+import { removeItemFromPack } from './store/actions/packs/removeFromPack';
 import PackModel from './PackModel';
 const BinPacking3D = require('binpackingjs').BP3D;
 const { Item, Bin, Packer } = BinPacking3D;
@@ -45,6 +46,31 @@ class Pack extends React.Component {
       },
       link: {
         color: secondary,
+      },
+      tdh: {
+        padding: '0 15px',
+        fontWeight: 'bold',
+      },
+      td: {
+        padding: '0 15px',
+        width: 'auto',
+        whiteSpace: 'nowrap',
+        textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      },
+      table: {
+        borderCollapse: 'collapse',
+        paddingBottom: '1rem',
+        width: 'auto',
+        marginLeft: '5rem',
+        marginRight: '5rem',
+      },
+      tdButton: {
+        margin: 'auto',
+        display: 'block',
+        backgroundColor: secondary,
+        color: 'white',
       },
     };
     let pack = null;
@@ -139,26 +165,72 @@ class Pack extends React.Component {
                   Back
                 </Button>
               </Link>
-              <h3>{pack.name}</h3>
-              <p>{`Total pack weight: ${totalWeight / 1000} [kg]`}</p>
-              {pack.SubItem.length > 0 && (
-                <ul>
-                  {pack.SubItem &&
-                    pack.SubItem.map((item, idx) => (
-                      <li key={idx}>
-                        {item.name}{' '}
-                        {`${
-                          Math.round(10 * (100 * (item.weight / totalWeight))) /
-                          10
-                        } %`}
-                      </li>
+              <div
+                style={{
+                  diplay: 'inline-block',
+                  marginTop: '1rem',
+                  marginBottom: '1rem',
+                  textAlign: 'center',
+                }}
+              >
+                <div>{pack.name}</div>
+                <div>{`Total pack weight: ${totalWeight / 1000} [kg]`}</div>
+                <img
+                  style={{ height: '100px', width: '100px' }}
+                  src={pack.image_url}
+                />
+              </div>
+              <table style={style.table}>
+                <thead>
+                  <tr>
+                    <td style={style.tdh}>Name</td>
+                    <td style={style.tdh}>Weight [%]</td>
+                    <td style={style.tdh}>Weight [kg]</td>
+                    <td style={style.tdh}>Photo</td>
+                    <td style={style.tdh}>Remove</td>
+                  </tr>
+                </thead>
+                {pack.SubItem.length > 0 && (
+                  <tbody>
+                    {pack.SubItem.map((item, idx) => (
+                      <tr key={idx}>
+                        <td style={style.td}>{item.name}</td>
+                        <td style={style.td}>
+                          {`${
+                            Math.round(
+                              10 * (100 * (item.weight / totalWeight))
+                            ) / 10
+                          } %`}
+                        </td>
+                        <td style={style.td}>
+                          {`${Math.round(10 * (item.weight / 1000)) / 10} kg`}
+                        </td>
+                        <td style={style.td}>
+                          <img
+                            style={{ height: '50px', width: '50px' }}
+                            src={item.image_url}
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            style={style.tdButton}
+                            variant='contained'
+                            onClick={() => this.props.removeFromPack(item.id)}
+                          >
+                            X
+                          </Button>
+                        </td>
+                      </tr>
                     ))}
-                </ul>
-              )}
+                  </tbody>
+                )}
+              </table>
             </Typography>
 
             <PackModel packDims={packDims} packItems={itemsToPack} />
-            {pack.SubItem.length === 0 && <div>No items in this pack!!</div>}
+            {pack.SubItem.length === 0 && (
+              <div style={style.text}>No items in this pack!!</div>
+            )}
           </div>
         )}
 
@@ -177,6 +249,7 @@ const mapState = (state) => state;
 const mapDispatch = (dispatch) => {
   return {
     getThePacks: () => dispatch(getPacks()),
+    removeFromPack: (itemId) => dispatch(removeItemFromPack(itemId)),
   };
 };
 

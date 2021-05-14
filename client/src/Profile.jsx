@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getItems } from './store/actions/items/getItems';
 import { setItem } from './store/actions/items/setItem';
 import { deleteItem } from './store/actions/items/deleteItem';
+import { getPacks } from './store/actions/packs/getPacks';
 import AddModal from './AddModal.jsx';
 import EditModal from './EditModal.jsx';
 import AddToPackSelect from './forms/AddToPackSelect';
@@ -82,16 +83,16 @@ const style = {
 };
 
 function Profile() {
-  // const ref = useRef(0);
-  // const user = useSelector((state) => state.user);
   const items = useSelector((state) => state.items);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const packs = [...items].filter((item) => item.category === 'Pack');
+  const packsFromState = useSelector((state) => state.packs);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getItems());
+    dispatch(getPacks());
   }, []);
 
   function toggleShowAddModal() {
@@ -138,71 +139,78 @@ function Profile() {
           >
             Add item
           </Button>
-          <Typography variant='h6' style={style.text}>
-            <table style={style.table}>
-              <thead style={style.tr}>
-                <tr>
-                  <th style={style.th}>Add To Pack</th>
-                  <th style={style.th}>Name</th>
-                  <th style={style.th}>Category</th>
-                  <th style={style.th}>Weight [g]</th>
-                  <th style={style.th}>Length [cm]</th>
-                  <th style={style.th}>Width [cm]</th>
-                  <th style={style.th}>Height [cm]</th>
-                  <th style={style.th}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item, id) => (
-                  <tr key={id} style={style.tr}>
-                    <td style={style.td}>
-                      {item.category !== 'Pack' ? (
-                        <AddToPackSelect packs={packs} item={item} />
-                      ) : (
-                        <div> </div>
-                      )}
-                    </td>
-                    {item.category !== 'Pack' ? (
-                      <td style={style.td}>{item.name}</td>
-                    ) : (
+          {items.length > 0 && (
+            <Typography variant='h6' style={style.text}>
+              <table style={style.table}>
+                <thead style={style.tr}>
+                  <tr>
+                    <th style={style.th}>Add To Pack</th>
+                    <th style={style.th}>Name</th>
+                    <th style={style.th}>Category</th>
+                    <th style={style.th}>Weight [g]</th>
+                    <th style={style.th}>Length [cm]</th>
+                    <th style={style.th}>Width [cm]</th>
+                    <th style={style.th}>Height [cm]</th>
+                    <th style={style.th}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item, id) => (
+                    <tr key={id} style={style.tr}>
                       <td style={style.td}>
-                        <RouteLink
-                          to={{
-                            pathname: '/pack',
-                            hash: `#${item.id}`,
-                          }}
-                        >
-                          {item.name}
-                        </RouteLink>
+                        {item.category !== 'Pack' ? (
+                          <AddToPackSelect packs={packs} item={item} />
+                        ) : (
+                          <div> </div>
+                        )}
                       </td>
-                    )}
-                    <td style={style.td}>{item.category}</td>
-                    <td style={style.td}>{item.weight}</td>
-                    <td style={style.td}>{item.length}</td>
-                    <td style={style.td}>{item.width}</td>
-                    <td style={style.td}>{item.height}</td>
-                    <td style={style.td.actions}>
-                      <Button
-                        variant='contained'
-                        color='secondary'
-                        style={style.button}
-                        onClick={() => dispatch(deleteItem(item))}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        variant='contained'
-                        color='secondary'
-                        style={style.button}
-                        onClick={() => toggleShowEditModal(item)}
-                        disabled
-                      >
-                        Edit
-                      </Button>
+                      {item.category !== 'Pack' ? (
+                        <td style={style.td}>{item.name}</td>
+                      ) : (
+                        <td style={style.td}>
+                          <RouteLink
+                            to={{
+                              pathname: '/pack',
+                              hash: `#${item.id}`,
+                            }}
+                          >
+                            {packsFromState.length > 0 &&
+                              `(${
+                                packsFromState.filter(
+                                  (p) => p.id === item.id
+                                )[0].SubItem.length
+                              }) `}
+                            {item.name}
+                          </RouteLink>
+                        </td>
+                      )}
+                      <td style={style.td}>{item.category}</td>
+                      <td style={style.td}>{item.weight}</td>
+                      <td style={style.td}>{item.length}</td>
+                      <td style={style.td}>{item.width}</td>
+                      <td style={style.td}>{item.height}</td>
+                      <td style={style.td.actions}>
+                        <Button
+                          variant='contained'
+                          color='secondary'
+                          style={style.button}
+                          onClick={() => dispatch(deleteItem(item))}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          variant='contained'
+                          color='secondary'
+                          style={style.button}
+                          onClick={() => toggleShowEditModal(item)}
+                          disabled
+                        >
+                          Edit
+                        </Button>
 
-                      {item.category !== 'Pack' && (
-                        <div>
-                          {/* <Button
+                        {item.category !== 'Pack' && (
+                          <div>
+                            {/* <Button
                             variant='contained'
                             color='secondary'
                             style={style.button}
@@ -210,12 +218,12 @@ function Profile() {
                           >
                             Add to pack
                           </Button> */}
-                          {/* <select style={{ padding: '.5rem' }}>
+                            {/* <select style={{ padding: '.5rem' }}>
                             {packs.map((pack, id) => (
                               <option key={id}>{pack.name}</option>
                             ))}
                           </select> */}
-                          {/* <FormControl>
+                            {/* <FormControl>
                             <Select
                               value={pack}
                               onChange={onChange}
@@ -226,14 +234,15 @@ function Profile() {
                               
                             </Select>
                           </FormControl> */}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Typography>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Typography>
+          )}
         </div>
       </Paper>
     </>
