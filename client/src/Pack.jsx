@@ -50,6 +50,9 @@ class Pack extends React.Component {
       tdh: {
         padding: '0 15px',
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       },
       td: {
         padding: '0 15px',
@@ -58,6 +61,16 @@ class Pack extends React.Component {
         textAlign: 'center',
         marginLeft: 'auto',
         marginRight: 'auto',
+        color: secondary,
+      },
+      tdx: {
+        padding: '0 15px',
+        width: 'auto',
+        whiteSpace: 'nowrap',
+        textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        color: 'red',
       },
       table: {
         borderCollapse: 'collapse',
@@ -77,6 +90,9 @@ class Pack extends React.Component {
     let packDims = [null, null, null];
     let itemsToPack = null;
     let totalWeight = null;
+    let notInPack = null;
+    let sortedPackSubitems = [];
+    let sortedNotinPack = [];
     if (this.props.packs.length > 0) {
       pack = this.props.packs.filter(
         (pack) => pack.id === window.location.hash.slice(1)
@@ -84,7 +100,7 @@ class Pack extends React.Component {
       packDims = [pack.width, pack.height, pack.depth];
       let bin = new Bin('pack', pack.width, pack.height, pack.depth, Infinity);
       const itemArr = [];
-      console.log(pack.SubItem);
+
       for (let i = 0; i < pack.SubItem.length; i++) {
         let currentItem = pack.SubItem[i];
         itemArr.push(
@@ -103,7 +119,12 @@ class Pack extends React.Component {
         packer.addItem(itemArr[i]);
       }
       packer.pack();
-
+      notInPack = [];
+      if (packer.unfitItems.length > 0) {
+        for (let item of packer.unfitItems) {
+          notInPack.push(item.name);
+        }
+      }
       const factor = 1 * 10 ** 5;
       itemsToPack = [];
       for (let i = 0; i < bin.items.length; i++) {
@@ -163,8 +184,6 @@ class Pack extends React.Component {
           currentItem.position[1] / factor + currentItem.height / (2 * factor),
           currentItem.position[2] / factor + currentItem.depth / (2 * factor),
         ];
-        console.log('currentItempos2', currentItem.position[2]);
-        console.log('currentItem height', currentItem.height / factor);
 
         itemsToPack.push([
           [
@@ -175,17 +194,87 @@ class Pack extends React.Component {
           currentItemPosition,
         ]);
       }
-      console.log(bin.items);
+      for (let item of pack.SubItem) {
+        if (!notInPack.includes(item.name)) {
+          sortedPackSubitems.push(item);
+        } else {
+          sortedNotinPack.push(item);
+        }
+      }
+      sortedPackSubitems = [...sortedPackSubitems, ...sortedNotinPack];
 
-      const totalItemsWeight = pack.SubItem.reduce(
-        (acc, cur) => (acc += 1 * cur.weight),
-        0
-      );
+      const totalItemsWeight = pack.SubItem.reduce((acc, cur) => {
+        if (!notInPack.includes(cur.name)) {
+          acc += 1 * cur.weight;
+          return acc;
+        } else {
+          return acc;
+        }
+      }, 0);
       totalWeight = Math.round(
         (10 * (1 * pack.weight + totalItemsWeight)) / 10
       );
     }
-
+    const colors = [
+      'palegreen',
+      'cyan',
+      'pink',
+      'thistle',
+      'gold',
+      'powderblue',
+      'peachpuff',
+    ];
+    // const colors = [
+    //   '#FF6633',
+    //   '#FFB399',
+    //   '#FFFF99',
+    //   '#00B3E6',
+    //   '#E6B333',
+    //   '#3366E6',
+    //   '#999966',
+    //   '#99FF99',
+    //   '#B34D4D',
+    //   '#80B300',
+    //   '#809900',
+    //   '#E6B3B3',
+    //   '#6680B3',
+    //   '#66991A',
+    //   '#FF99E6',
+    //   '#CCFF1A',
+    //   '#FF1A66',
+    //   '#E6331A',
+    //   '#33FFCC',
+    //   '#66994D',
+    //   '#B366CC',
+    //   '#4D8000',
+    //   '#B33300',
+    //   '#CC80CC',
+    //   '#66664D',
+    //   '#991AFF',
+    //   '#E666FF',
+    //   '#4DB3FF',
+    //   '#1AB399',
+    //   '#E666B3',
+    //   '#33991A',
+    //   '#CC9999',
+    //   '#B3B31A',
+    //   '#00E680',
+    //   '#4D8066',
+    //   '#809980',
+    //   '#E6FF80',
+    //   '#1AFF33',
+    //   '#999933',
+    //   '#FF3380',
+    //   '#CCCC00',
+    //   '#66E64D',
+    //   '#4D80CC',
+    //   '#9900B3',
+    //   '#E64D66',
+    //   '#4DB380',
+    //   '#FF4D4D',
+    //   '#99E6E6',
+    //   '#6666FF',
+    // ];
     return (
       <div>
         {pack !== null && itemsToPack && (
@@ -208,8 +297,16 @@ class Pack extends React.Component {
                   textAlign: 'center',
                 }}
               >
-                <div>{pack.name}</div>
-                <div>{`Total pack weight: ${totalWeight / 1000} [kg]`}</div>
+                <div style={{ fontWeight: 'bold' }}>{pack.name}</div>
+                <div style={{ fontSize: 'smaller' }}>{`Loaded pack weight: ${
+                  totalWeight / 1000
+                } [kg]`}</div>
+                <div style={{ fontSize: 'smaller' }}>{`Pack weight: ${
+                  pack.weight / 1000
+                } [kg]`}</div>
+                <div style={{ fontSize: 'smaller' }}>{`% due to pack weight: ${
+                  Math.round(100 * (pack.weight / totalWeight) * 100) / 100
+                } [%]`}</div>
                 <img
                   style={{ height: '100px', width: '100px' }}
                   src={pack.image_url}
@@ -219,50 +316,95 @@ class Pack extends React.Component {
                 <thead>
                   <tr>
                     <td style={style.tdh}>Name</td>
+                    <td style={style.tdh}>Fits?</td>
+                    <td style={style.tdh}>Key</td>
                     <td style={style.tdh}>Weight [%]</td>
                     <td style={style.tdh}>Weight [kg]</td>
                     <td style={style.tdh}>Photo</td>
                     <td style={style.tdh}>Remove</td>
                   </tr>
                 </thead>
-                {pack.SubItem.length > 0 && (
+                {sortedPackSubitems.length > 0 && (
                   <tbody>
-                    {pack.SubItem.map((item, idx) => (
-                      <tr key={idx}>
-                        <td style={style.td}>{item.name}</td>
-                        <td style={style.td}>
-                          {`${
-                            Math.round(
-                              10 * (100 * (item.weight / totalWeight))
-                            ) / 10
-                          } %`}
-                        </td>
-                        <td style={style.td}>
-                          {`${Math.round(10 * (item.weight / 1000)) / 10} kg`}
-                        </td>
-                        <td style={style.td}>
-                          <img
-                            style={{ height: '50px', width: '50px' }}
-                            src={item.image_url}
-                          />
-                        </td>
-                        <td>
-                          <Button
-                            style={style.tdButton}
-                            variant='contained'
-                            onClick={() => this.props.removeFromPack(item.id)}
-                          >
-                            X
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                    {sortedPackSubitems.map((item, idx) =>
+                      !notInPack.includes(item.name) ? (
+                        <tr key={idx}>
+                          <td style={style.td}>{item.name}</td>
+                          <td style={style.td}>✔</td>
+                          <td style={style.td}>
+                            <div
+                              style={{
+                                backgroundColor: `${colors[idx]}`,
+                                width: '25px',
+                                height: '25px',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                              }}
+                            ></div>
+                          </td>
+                          <td style={style.td}>
+                            {`${
+                              Math.round(
+                                10 * (100 * (item.weight / totalWeight))
+                              ) / 10
+                            } %`}
+                          </td>
+                          <td style={style.td}>
+                            {`${Math.round(10 * (item.weight / 1000)) / 10} kg`}
+                          </td>
+                          <td style={style.td}>
+                            <img
+                              style={{ height: '50px', width: '50px' }}
+                              src={item.image_url}
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              style={style.tdButton}
+                              variant='contained'
+                              onClick={() => this.props.removeFromPack(item.id)}
+                            >
+                              X
+                            </Button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr key={idx}>
+                          <td style={style.tdx}>{item.name}</td>
+                          <td style={style.tdx}>🚫</td>
+                          <td style={style.td}>-</td>
+                          <td style={style.tdx}>{'-'}</td>
+                          <td style={style.tdx}>
+                            {`${Math.round(10 * (item.weight / 1000)) / 10} kg`}
+                          </td>
+                          <td style={style.tdx}>
+                            <img
+                              style={{ height: '50px', width: '50px' }}
+                              src={item.image_url}
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              style={style.tdButton}
+                              variant='contained'
+                              onClick={() => this.props.removeFromPack(item.id)}
+                            >
+                              X
+                            </Button>
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 )}
               </table>
             </Typography>
 
-            <PackModel packDims={packDims} packItems={itemsToPack} />
+            <PackModel
+              packDims={packDims}
+              packItems={itemsToPack}
+              colors={colors}
+            />
             {pack.SubItem.length === 0 && (
               <div style={style.text}>No items in this pack!!</div>
             )}
