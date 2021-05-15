@@ -53,16 +53,13 @@ export default function SignupForm() {
     if (error !== '') {
       setLoading(false);
     }
-    try {
-      if (user.id) {
-        clearTimeout(timeout);
-        dispatch(clearError());
-        history.push('/account');
-      }
-    } catch (ex) {
-      console.log(ex);
+
+    if (user.id) {
+      clearTimeout(timeout);
+      dispatch(clearError());
+      history.push('/account');
     }
-  }, []);
+  }, [user, error]);
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [data, setData] = useState({ email: '', password: '' });
@@ -72,15 +69,6 @@ export default function SignupForm() {
   }
   function onChange(ev) {
     setData({ ...data, [ev.target.name]: ev.target.value });
-  }
-  try {
-    if (user.id) {
-      clearTimeout(timeout);
-      dispatch(clearError());
-      history.push('/account');
-    }
-  } catch (ex) {
-    console.log(ex);
   }
 
   async function onSubmit(ev) {
@@ -111,6 +99,7 @@ export default function SignupForm() {
             name='email'
             type='email'
             value={data.email}
+            autoComplete='current-email'
             required
           />
         </div>
@@ -121,6 +110,7 @@ export default function SignupForm() {
             onChange={onChange}
             name='password'
             type='password'
+            autoComplete='current-password'
             value={data.password}
             required
           />

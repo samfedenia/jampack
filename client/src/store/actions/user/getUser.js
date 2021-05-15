@@ -19,7 +19,7 @@ const getUser = () => async (dispatch) => {
     const authenticatedUser = await axios.get('/api/login/auth', getToken());
     if (authenticatedUser.data) dispatch(_getUser(authenticatedUser.data));
   } catch (err) {
-    console.log(err.message);
+    // console.log(err.message);
     const errorMessage = err.message;
     dispatch(setError(errorMessage));
     clearToken();

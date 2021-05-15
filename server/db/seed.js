@@ -4,7 +4,7 @@ const {
 
 const seed = async () => {
   const user = await User.create({
-    email: 'test@test.com',
+    email: 'sam@fedenia.com',
     password: '1',
   });
   const pack = await Item.create({
@@ -54,31 +54,78 @@ const seed = async () => {
     itemId: pack.id,
     category: 'Shelter',
   });
-
-  const user2 = await User.create({
-    email: 'test2@test.com',
-    password: '12345678',
+  await Item.create({
+    name: 'Bear Vault BV500 + Food',
+    weight: 7672,
+    depth: 23,
+    width: 23,
+    height: 34,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/61FnfLMEnFL._AC_SL1200_.jpg',
+    userId: user.id,
+    itemId: pack.id,
+    category: 'Food',
   });
-  const item2 = await Item.create({
-    name: 'Tent',
-    weight: 1344.0,
-    width: 40.6,
-    depth: 15.2,
-    height: 15.2,
-    image_url: 'https://dummyimage.com/400x400/999999/222222',
-    userId: user2.id,
+  await Item.create({
+    name: 'ENO Hammock',
+    weight: 540,
+    depth: 15,
+    width: 14,
+    height: 5.6,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/61bcYZk2RKL._AC_SL1000_.jpg',
+    userId: user.id,
+    itemId: pack.id,
     category: 'Shelter',
   });
   await Item.create({
-    name: 'Tent Stakes',
-    weight: 150,
-    depth: 16,
-    width: 8,
-    height: 8,
-    image_url: 'https://dummyimage.com/400x400/999999/222222',
-    userId: user2.id,
-    itemId: item2.id,
+    name: 'GSI Dualist Cookset',
+    weight: 672,
+    depth: 15,
+    width: 15,
+    height: 16.3,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/71JojbXJB9L._AC_SL1500_.jpg',
+    userId: user.id,
+    itemId: pack.id,
+    category: 'Food',
+  });
+  await Item.create({
+    name: 'Thermarest NeoAir Mattress',
+    weight: 430,
+    depth: 22.9,
+    width: 11.7,
+    height: 11.7,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/61TKMCxBtwL._AC_SL1500_.jpg',
+    userId: user.id,
+    itemId: pack.id,
     category: 'Shelter',
+  });
+  await Item.create({
+    name: 'Clothes',
+    weight: 2400,
+    depth: 30,
+    width: 25,
+    height: 25,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/618cemG0X8L._AC_SL1200_.jpg',
+    userId: user.id,
+    itemId: pack.id,
+    category: 'Shelter',
+  });
+
+  await Item.create({
+    name: 'Big Agnes Chair',
+    weight: 896,
+    depth: 45.7,
+    width: 10.2,
+    height: 12.7,
+    image_url:
+      'https://images-na.ssl-images-amazon.com/images/I/817LZPJ4wrL._AC_SL1500_.jpg',
+    userId: user.id,
+    itemId: pack.id,
+    category: 'Other',
   });
 };
 

@@ -17,7 +17,7 @@ const getItems = () => async (dispatch) => {
   try {
     dispatch(clearError());
     const items = await axios.get('/api/user/items', getToken());
-    console.log(items.data);
+
     if (items.data.items) dispatch(_getItems(items.data.items));
   } catch (err) {
     console.log(err.message);
