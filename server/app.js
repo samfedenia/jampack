@@ -6,7 +6,7 @@ const router = require('./api');
 
 require('dotenv').config();
 
-app.use(morgan('dev'));
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
