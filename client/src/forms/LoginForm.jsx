@@ -6,7 +6,7 @@ import { loginUser } from '../store/actions/user/login';
 import { clearError } from '../store/actions/error/clearError';
 import { useHistory } from 'react-router';
 
-const primary = lightGreen[100];
+// const primary = lightGreen[100];
 const secondary = lightGreen[600];
 const style = {
   root: {
@@ -52,31 +52,18 @@ export default function LoginForm() {
     if (error !== '') {
       setLoading(false);
     }
-    try {
-      if (user.id) {
-        clearTimeout(timeout);
-        dispatch(clearError());
-        history.push('/account');
-      }
-    } catch (ex) {
-      console.log(ex);
-    }
-  }, []);
 
-  const [data, setData] = useState({ email: '', password: '' });
-
-  function onChange(ev) {
-    setData({ ...data, [ev.target.name]: ev.target.value });
-  }
-
-  try {
     if (user.id) {
       clearTimeout(timeout);
       dispatch(clearError());
       history.push('/account');
     }
-  } catch (ex) {
-    console.log(ex);
+  }, [user, error]);
+
+  const [data, setData] = useState({ email: '', password: '' });
+
+  function onChange(ev) {
+    setData({ ...data, [ev.target.name]: ev.target.value });
   }
 
   function onSubmit(ev) {
@@ -106,6 +93,7 @@ export default function LoginForm() {
             onChange={onChange}
             name='email'
             type='email'
+            autoComplete='current-email'
             value={data.email}
             required
           />
@@ -117,6 +105,7 @@ export default function LoginForm() {
             onChange={onChange}
             name='password'
             type='password'
+            autoComplete='current-password'
             value={data.password}
             required
           />

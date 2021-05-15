@@ -16,7 +16,6 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Nav />
-
         <Switch>
           <Route path='/login'>
             <Login />
@@ -27,20 +26,23 @@ function App() {
           <Route path='/logout'>
             <Logout />
           </Route>
-          {user.id && (
-            <>
-              <Route path='/account'>
-                <Profile />
-              </Route>
-              <Route path='/pack'>
-                <Pack />
-              </Route>
-            </>
-          )}
-          <Route path='/'>
-            <Home />
-          </Route>
         </Switch>
+        {user.id ? (
+          <>
+            <Route path='/account'>
+              <Profile />
+            </Route>
+            <Route path='/pack'>
+              <Pack />
+            </Route>
+          </>
+        ) : (
+          <>
+            <Route path='/'>
+              <Home />
+            </Route>
+          </>
+        )}
       </BrowserRouter>
     </>
   );

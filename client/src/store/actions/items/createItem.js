@@ -16,7 +16,7 @@ const createItem = (item) => async (dispatch) => {
       .data;
 
     dispatch(_createItem(newItem));
-    console.log(newItem.category);
+    // console.log(newItem.category);
     if (newItem.category === 'Pack') dispatch(getPacks());
   } catch (err) {
     console.log(err.message);

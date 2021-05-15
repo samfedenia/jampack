@@ -8,7 +8,7 @@ import { setItem } from './store/actions/items/setItem';
 import { deleteItem } from './store/actions/items/deleteItem';
 import { getPacks } from './store/actions/packs/getPacks';
 import AddModal from './AddModal.jsx';
-import EditModal from './EditModal.jsx';
+
 import AddToPackSelect from './forms/AddToPackSelect';
 
 const primary = lightGreen[100];
@@ -63,8 +63,17 @@ const style = {
     borderRadius: '0.2rem',
     padding: '0.4rem',
     actions: {
-      display: 'flex',
-      flexDirection: 'column',
+      verticalAlign: 'middle',
+      textAlign: 'center',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      align: 'center',
+      button: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        width: '6rem',
+        backgroundColor: secondary,
+      },
     },
   },
   th: {
@@ -85,9 +94,8 @@ const style = {
 function Profile() {
   const items = useSelector((state) => state.items);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const packs = [...items].filter((item) => item.category === 'Pack');
-  const packsFromState = useSelector((state) => state.packs);
+  // const packsFromState = useSelector((state) => state.packs);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -102,10 +110,6 @@ function Profile() {
   function toggleHideAddModal() {
     setShowAddModal(false);
   }
-  function toggleShowEditModal(item) {
-    dispatch(setItem(item));
-    setShowEditModal(true);
-  }
 
   function toggleHideEditModal() {
     setShowEditModal(false);
@@ -118,11 +122,7 @@ function Profile() {
           show={showAddModal}
           handleClose={toggleHideAddModal}
         ></AddModal>
-        <EditModal
-          show={showEditModal}
-          handleClose={toggleHideEditModal}
-          children={null}
-        ></EditModal>
+
         <div style={style.div}>
           <Typography variant='h3' style={style.text}>
             Inventory
@@ -131,7 +131,7 @@ function Profile() {
             variant='contained'
             color='secondary'
             style={{
-              margin: '.1rem',
+              marginTop: '.1rem',
               width: '12rem',
               backgroundColor: secondary,
             }}
@@ -161,7 +161,7 @@ function Profile() {
                         {item.category !== 'Pack' ? (
                           <AddToPackSelect packs={packs} item={item} />
                         ) : (
-                          <div> </div>
+                          <div style={{ width: '2rem' }}>{'    '}</div>
                         )}
                       </td>
                       {item.category !== 'Pack' ? (
@@ -174,68 +174,27 @@ function Profile() {
                               hash: `#${item.id}`,
                             }}
                           >
-                            {packsFromState.length > 0 &&
-                              `(${
-                                packsFromState.filter(
-                                  (p) => p.id === item.id
-                                )[0].SubItem.length
-                              }) `}
                             {item.name}
                           </RouteLink>
                         </td>
                       )}
+
                       <td style={style.td}>{item.category}</td>
                       <td style={style.td}>{item.weight}</td>
                       <td style={style.td}>{item.depth}</td>
                       <td style={style.td}>{item.width}</td>
                       <td style={style.td}>{item.height}</td>
                       <td style={style.td.actions}>
-                        <Button
-                          variant='contained'
-                          color='secondary'
-                          style={style.button}
-                          onClick={() => dispatch(deleteItem(item))}
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                          variant='contained'
-                          color='secondary'
-                          style={style.button}
-                          onClick={() => toggleShowEditModal(item)}
-                          disabled
-                        >
-                          Edit
-                        </Button>
-
-                        {item.category !== 'Pack' && (
-                          <div>
-                            {/* <Button
+                        <div>
+                          <Button
                             variant='contained'
                             color='secondary'
-                            style={style.button}
-                            onClick={() => dispatch(addToPack(item, pack))}
+                            style={style.td.actions.button}
+                            onClick={() => dispatch(deleteItem(item))}
                           >
-                            Add to pack
-                          </Button> */}
-                            {/* <select style={{ padding: '.5rem' }}>
-                            {packs.map((pack, id) => (
-                              <option key={id}>{pack.name}</option>
-                            ))}
-                          </select> */}
-                            {/* <FormControl>
-                            <Select
-                              value={pack}
-                              onChange={onChange}
-                              name='pack'
-                              style={style.selectDiv}
-                            >
-                              <MenuItem key={id} value={pack}>{pack.name}</MenuItem>
-                              
-                            </Select>
-                          </FormControl> */}
-                          </div>
-                        )}
+                            Delete
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}

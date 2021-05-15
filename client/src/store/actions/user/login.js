@@ -21,7 +21,7 @@ const loginUser = (user) => async (dispatch) => {
     const authenticatedUser = await axios.get('/api/login/auth', getToken());
     dispatch(_loginUser(authenticatedUser.data));
   } catch (err) {
-    console.log(err.response.data);
+    // console.log(err.response.data);
     const { errorMessage } = err.response.data;
     dispatch(setError(errorMessage));
   }
