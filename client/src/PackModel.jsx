@@ -20,6 +20,8 @@ class PackModel extends React.Component {
   componentWillUnmount() {
     const existingCanvas = document.querySelector('canvas');
     if (existingCanvas) {
+      console.log('diposed and cleared three.js canvas');
+      this.state.renderer.renderLists.dispose();
       this.state.renderer.clear();
       existingCanvas.remove();
     }
