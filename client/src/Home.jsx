@@ -25,7 +25,7 @@ function Home() {
   return (
     <Paper elevation={3} variant='outlined' style={style.root}>
       <Typography variant='h3' style={style.text}>
-        Welcome to PackPlanner!
+        Welcome to Jam Pack!
       </Typography>
     </Paper>
   );

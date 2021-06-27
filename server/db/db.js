@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const DATABASE_URL =
-  process.env.DATABASE_URL || 'postgres://localhost/packplanner_db';
+  process.env.DATABASE_URL || 'postgres://localhost/jampack_db';
 const dbConfig = {
   logging: false,
 };
