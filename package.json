@@ -1,11 +1,12 @@
 {
-  "name": "packplanner",
+  "name": "jampack",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node server",
     "build": "webpack",
+    "setup:dev": "node setup",
     "build:dev": "npm run build -- --watch --mode=development",
     "start:dev": "npm run start-server & npm run build:dev",
     "start-server": "nodemon server --ignore public/ --ignore client/",
