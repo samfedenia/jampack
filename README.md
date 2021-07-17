@@ -23,3 +23,6 @@ password: foobar<br><br>
 or create a new one using the sign up!
 
 7) Kill the app with <CTRL+c>
+
+### demo deploy
+https://jampack-demo.herokuapp.com
